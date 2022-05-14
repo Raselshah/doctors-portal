@@ -1,11 +1,19 @@
-import React from 'react';
+
+import React, { useState } from "react";
+
+import Footer from "../Footer/Footer";
+import AppointmentBanner from "./AppointmentBanner";
+import AppointmentShedule from "./AppointmentShedule";
 
 const Appointment = () => {
-    return (
-        <div>
-            <h2>Appointment</h2>
-        </div>
-    );
+  const [date, setDate] = useState(new Date());
+  return (
+    <div>
+      <AppointmentBanner date={date} setDate={setDate} />
+      <AppointmentShedule date={date} />
+      <Footer />
+    </div>
+  );
 };
 
 export default Appointment;

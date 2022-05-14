@@ -7,9 +7,11 @@ import Info from "./Info";
 import OurServices from "./OurServices";
 import Testimonials from "./Testimonials";
 
+import Footer from "../../Footer/Footer";
+
 const Home = () => {
   return (
-    <div className="px-12">
+    <div>
       <Banner />
       <Info />
       <OurServices />
@@ -17,6 +19,8 @@ const Home = () => {
       <AppointmentBanner />
       <Testimonials />
       <ContactUs />
+
+      <Footer />
     </div>
   );
 };

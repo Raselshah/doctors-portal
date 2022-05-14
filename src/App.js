@@ -6,11 +6,10 @@ import Appointment from "./Pages/Appointment/Appointment";
 import Reviews from "./Pages/Reviews/Reviews";
 import Contact from "./Pages/Contact/Contact";
 import LogIn from "./Pages/LogIn/LogIn";
-import Footer from "./Pages/Footer/Footer";
 
 function App() {
   return (
-    <div>
+    <div className="max-w-screen-2xl mx-auto px-12">
       <NavMenu />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -20,7 +19,6 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<LogIn />} />
       </Routes>
-      <Footer />
     </div>
   );
 }
