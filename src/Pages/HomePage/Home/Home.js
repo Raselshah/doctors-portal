@@ -1,9 +1,11 @@
 import React from "react";
 import Banner from "../Banner";
+import ContactUs from "../ContactUs";
 import AppointmentBanner from "./AppointmentBanner";
 import Exceptional from "./Exceptional";
 import Info from "./Info";
 import OurServices from "./OurServices";
+import Testimonials from "./Testimonials";
 
 const Home = () => {
   return (
@@ -13,6 +15,8 @@ const Home = () => {
       <OurServices />
       <Exceptional />
       <AppointmentBanner />
+      <Testimonials />
+      <ContactUs />
     </div>
   );
 };
