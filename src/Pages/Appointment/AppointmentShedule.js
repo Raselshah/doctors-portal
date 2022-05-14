@@ -29,7 +29,13 @@ const AppointmentShedule = ({ date }) => {
           />
         ))}
       </div>
-      { treatment && <AppointmentModal treatment={treatment} /> }
+      {treatment && (
+        <AppointmentModal
+          date={date}
+          setTreatment={setTreatment}
+          treatment={treatment}
+        />
+      )}
     </div>
   );
 };
