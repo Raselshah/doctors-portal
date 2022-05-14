@@ -11,17 +11,17 @@ const ContactUs = () => {
         <input
           type="text"
           placeholder="Email Address"
-          class="input input-bordered w-full lg:w-1/3"
+          className="input input-bordered w-full lg:w-1/3"
         />
         <input
           type="text"
           placeholder="Subject"
-          class="input input-bordered w-full lg:w-1/3"
+          className="input input-bordered w-full lg:w-1/3"
         />
         <textarea
           type="text"
           placeholder="Your Message"
-          class="input input-bordered w-full lg:w-1/3"
+          className="input input-bordered w-full lg:w-1/3"
         />
         <input
           className="btn border-0 text-white bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary"

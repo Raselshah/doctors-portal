@@ -6,6 +6,7 @@ import Appointment from "./Pages/Appointment/Appointment";
 import Reviews from "./Pages/Reviews/Reviews";
 import Contact from "./Pages/Contact/Contact";
 import LogIn from "./Pages/LogIn/LogIn";
+import Footer from "./Pages/Footer/Footer";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<LogIn />} />
       </Routes>
+      <Footer />
     </div>
   );
 }
