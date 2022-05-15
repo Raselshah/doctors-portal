@@ -1,7 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import { useAuthState } from "react-firebase-hooks/auth";
+import auth from "../../firebase.init";
+import { signOut } from "firebase/auth";
 
 const NavMenu = () => {
+  const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate();
+  const logout = () => {
+    signOut(auth);
+    navigate("/login");
+  };
   const menuItem = (
     <>
       <li>
@@ -19,9 +29,34 @@ const NavMenu = () => {
       <li>
         <Link to="/contact">Contact Us</Link>
       </li>
-      <li>
-        <Link to="/login">Login</Link>
-      </li>
+
+      {user ? (
+        <div class="dropdown dropdown-end">
+          <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+            <div class="w-10 rounded-full">
+              {user?.photoURL ? (
+                <img src={user?.photoURL} alt="" />
+              ) : (
+                <h4 className="text-center text-lg text-secondary flex justify-center items-center h-full">
+                  {user?.email?.slice(0, 2)}
+                </h4>
+              )}
+            </div>
+          </label>
+          <ul
+            tabindex="0"
+            class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+          >
+            <button className="hover:underline" onClick={logout}>
+              Logout
+            </button>
+          </ul>
+        </div>
+      ) : (
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
+      )}
     </>
   );
   return (
@@ -46,7 +81,7 @@ const NavMenu = () => {
           </label>
           <ul
             tabindex="0"
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-accent rounded-box w-52"
+            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
             {menuItem}
           </ul>

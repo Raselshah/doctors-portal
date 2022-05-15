@@ -62,14 +62,6 @@ const AppointmentModal = ({ treatment, date, setTreatment }) => {
               value="Submit"
             />
           </form>
-          <div class="modal-action">
-            <label
-              for="appointment-modal"
-              class="btn btn-primary uppercase text-white"
-            >
-              Submit
-            </label>
-          </div>
         </div>
       </div>
     </div>

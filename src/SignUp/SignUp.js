@@ -1,37 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import SocialLogin from "../../Hooks/SocialLogin";
+import SocialLogin from "../Hooks/SocialLogin";
 import { useForm } from "react-hook-form";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
-import auth from "../../firebase.init";
-import Loading from "../../Hooks/Loading";
+import {
+  useCreateUserWithEmailAndPassword,
+  useUpdateProfile,
+} from "react-firebase-hooks/auth";
+import auth from "../firebase.init";
+import Loading from "../Hooks/Loading";
 
-const LogIn = () => {
+const SignUp = () => {
   const navigate = useNavigate();
 
-  const [signInWithEmailAndPassword, user, loading, error] =
-    useSignInWithEmailAndPassword(auth);
+  const [createUserWithEmailAndPassword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(auth);
+
+  const [updateProfile, updating, updateError] = useUpdateProfile(auth);
 
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
-
-  const onSubmit = (data) => {
-    signInWithEmailAndPassword(data.email, data.password);
+  const onSubmit = async (data) => {
+    await createUserWithEmailAndPassword(data.email, data.password);
+    await updateProfile({ displayName: data.name });
     console.log(data);
   };
 
-  if (loading) {
+  let signInError;
+
+  if (loading || updating) {
     return <Loading />;
   }
-
-  let logInError;
-  if (error) {
-    logInError = <p className="text-red-500">{error?.message}</p>;
+  if (error || updateError) {
+    signInError = <p className="text-red-500">{error?.message}</p>;
   }
-
   if (user) {
     navigate("/");
   }
@@ -39,9 +43,30 @@ const LogIn = () => {
   return (
     <div class="hero min-h-screen">
       <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-        <h2 className="text-center text-2xl">Login</h2>
+        <h2 className="text-center text-2xl">Sign Up</h2>
         <div class="card-body">
           <form onSubmit={handleSubmit(onSubmit)}>
+            <div class="form-control  w-full max-w-xs">
+              <label class="label">
+                <span class="label-text">Name</span>
+              </label>
+              <input
+                class="input input-bordered w-full max-w-xs"
+                {...register("name", {
+                  required: {
+                    value: true,
+                    message: "Name is required",
+                  },
+                })}
+              />
+              <label class="label">
+                {errors.name?.type === "required" && (
+                  <span class="label-text-alt text-red-500">
+                    {errors.name?.message}
+                  </span>
+                )}
+              </label>
+            </div>
             <div class="form-control w-full max-w-xs">
               <label class="label">
                 <span class="label-text">Email</span>
@@ -106,23 +131,17 @@ const LogIn = () => {
                 )}
               </label>
             </div>
-
-            <label class="label">
-              <a href="#" class="label-text-alt link link-hover">
-                Forgot password?
-              </a>
-            </label>
-            {logInError}
+            {signInError}
             <div class="form-control mt-6">
-              <button class="btn btn-accent">Login</button>
+              <button class="btn btn-accent">Sign Up</button>
             </div>
-            <div className="flex justify-center mt-3">
+            <div className="flex flex-col sm:flex-row justify-center mt-3">
               <small className="text-accent mr-1">New to Doctors Portal?</small>
               <small
-                onClick={() => navigate("/signup")}
+                onClick={() => navigate("/login")}
                 className="text-primary cursor-pointer"
               >
-                Create new account
+                Already have an account
               </small>
             </div>
           </form>
@@ -136,4 +155,4 @@ const LogIn = () => {
   );
 };
 
-export default LogIn;
+export default SignUp;
