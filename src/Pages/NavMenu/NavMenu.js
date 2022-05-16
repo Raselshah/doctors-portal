@@ -11,6 +11,7 @@ const NavMenu = () => {
   const navigate = useNavigate();
   const logout = () => {
     signOut(auth);
+    localStorage.removeItem("accessToken");
     navigate("/login");
   };
   if (loading) {
@@ -82,7 +83,6 @@ const NavMenu = () => {
             >
               <path
                 strokeLinecap="round"
-                strokeLinecap="round"
                 strokeWidth="2"
                 d="M4 6h16M4 12h8m-8 6h16"
               />
@@ -103,7 +103,7 @@ const NavMenu = () => {
         <ul className="menu menu-horizontal p-0">{menuItem}</ul>
       </div>
       <div className="navbar-end">
-        <label for="my-drawer-2" className="btn btn-ghost lg:hidden">
+        <label htmlFor="my-drawer-2" className="btn btn-ghost lg:hidden">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
@@ -112,7 +112,6 @@ const NavMenu = () => {
             stroke="currentColor"
           >
             <path
-              strokeLinecap="round"
               strokeLinecap="round"
               strokeWidth="2"
               d="M4 6h16M4 12h8m-8 6h16"
