@@ -1,25 +1,75 @@
 import React from "react";
 import { format } from "date-fns";
+import { useAuthState } from "react-firebase-hooks/auth";
+import auth from "../../firebase.init";
+import { toast } from "react-toastify";
 
-const AppointmentModal = ({ treatment, date, setTreatment }) => {
+const AppointmentModal = ({ treatment, date, setTreatment, refetch }) => {
+  const [user, loading, error] = useAuthState(auth);
+  const { _id, name, slots } = treatment;
+  const formattedDate = format(date, "PP");
   const handleBookingInfo = (event) => {
     event.preventDefault();
     const slot = event.target.slot.value;
-    console.log(slot);
-    setTreatment(null);
+    const bookingInfo = {
+      treatmentId: _id,
+      treatmentName: name,
+      date: formattedDate,
+      slot,
+      patient: user?.email,
+      patientName: user?.displayName,
+      phone: event.target.phone.value,
+    };
+
+    fetch("http://localhost:5000/booking", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(bookingInfo),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          toast.success(`Appointment ${formattedDate} at ${slot}`, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } else {
+          toast.error(
+            `Already selected appointment ${data.booking?.date} at ${data.booking?.slot}`,
+            {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            }
+          );
+        }
+        refetch();
+        setTreatment(null);
+      });
   };
   return (
     <div>
-      <input type="checkbox" id="appointment-modal" class="modal-toggle" />
-      <div class="modal modal-bottom sm:modal-middle">
-        <div class="modal-box">
+      <input type="checkbox" id="appointment-modal" className="modal-toggle" />
+      <div className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
           <label
-            for="appointment-modal"
-            class="btn btn-sm btn-circle absolute right-2 top-2"
+            htmlFor="appointment-modal"
+            className="btn btn-sm btn-circle absolute right-2 top-2"
           >
             ✕
           </label>
-          <h3 class="font-bold text-lg mb-4">{treatment.name}</h3>
+          <h3 className="font-bold text-lg mb-4">{treatment.name}</h3>
           <form
             onSubmit={handleBookingInfo}
             className="flex flex-col gap-2 justify-center items-center"
@@ -31,30 +81,39 @@ const AppointmentModal = ({ treatment, date, setTreatment }) => {
               readOnly
               disabled
               placeholder="Type here"
-              class="input input-bordered w-full max-w-xs"
+              className="input input-bordered w-full max-w-xs"
             />
-            <select name="slot" class="select select-accent w-full max-w-xs">
-              {treatment.slots.map((slot) => (
-                <option value={slot}>{slot}</option>
+            <select
+              name="slot"
+              className="select select-accent w-full max-w-xs"
+            >
+              {treatment.slots.map((slot, index) => (
+                <option key={index} value={slot}>
+                  {slot}
+                </option>
               ))}
             </select>
             <input
+              value={user?.displayName || ""}
+              readOnly
+              disabled
               name="name"
               type="text"
-              placeholder="Full Name"
-              class="input input-bordered w-full max-w-xs"
+              className="input input-bordered w-full max-w-xs"
             />
             <input
-              name="number"
+              name="phone"
               type="text"
               placeholder="Phone Number"
-              class="input input-bordered w-full max-w-xs"
+              className="input input-bordered w-full max-w-xs"
             />
             <input
+              readOnly
+              disabled
+              value={user?.email || ""}
               name="email"
               type="text"
-              placeholder="Email"
-              class="input input-bordered w-full max-w-xs"
+              className="input input-bordered w-full max-w-xs"
             />
             <input
               className="btn btn-primary w-full max-w-xs"

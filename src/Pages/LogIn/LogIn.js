@@ -1,5 +1,5 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import SocialLogin from "../../Hooks/SocialLogin";
 import { useForm } from "react-hook-form";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
@@ -11,7 +11,14 @@ const LogIn = () => {
 
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
+  const location = useLocation();
+  let from = location.state?.from?.pathname || "/";
 
+  useEffect(() => {
+    if (user) {
+      navigate(from, { replace: true });
+    }
+  }, [user, navigate, from]);
   const {
     register,
     formState: { errors },
@@ -20,7 +27,6 @@ const LogIn = () => {
 
   const onSubmit = (data) => {
     signInWithEmailAndPassword(data.email, data.password);
-    console.log(data);
   };
 
   if (loading) {
@@ -32,22 +38,18 @@ const LogIn = () => {
     logInError = <p className="text-red-500">{error?.message}</p>;
   }
 
-  if (user) {
-    navigate("/");
-  }
-
   return (
-    <div class="hero min-h-screen">
-      <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+    <div className="hero min-h-screen">
+      <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
         <h2 className="text-center text-2xl">Login</h2>
-        <div class="card-body">
+        <div className="card-body">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div class="form-control w-full max-w-xs">
-              <label class="label">
-                <span class="label-text">Email</span>
+            <div className="form-control w-full max-w-xs">
+              <label className="label">
+                <span className="label-text">Email</span>
               </label>
               <input
-                class="input input-bordered w-full max-w-xs"
+                className="input input-bordered w-full max-w-xs"
                 {...register("email", {
                   required: {
                     value: true,
@@ -60,26 +62,26 @@ const LogIn = () => {
                 })}
               />
 
-              <label class="label">
+              <label className="label">
                 {errors.email?.type === "required" && (
-                  <span class="label-text-alt text-red-500">
+                  <span className="label-text-alt text-red-500">
                     {errors.email?.message}
                   </span>
                 )}
                 {errors.email?.type === "pattern" && (
-                  <span class="label-text-alt text-red-500">
+                  <span className="label-text-alt text-red-500">
                     {errors.email?.message}
                   </span>
                 )}
               </label>
             </div>
 
-            <div class="form-control w-full max-w-xs">
-              <label class="label">
-                <span class="label-text">Password</span>
+            <div className="form-control w-full max-w-xs">
+              <label className="label">
+                <span className="label-text">Password</span>
               </label>
               <input
-                class="input input-bordered w-full max-w-xs"
+                className="input input-bordered w-full max-w-xs"
                 {...register("password", {
                   required: {
                     value: true,
@@ -93,28 +95,28 @@ const LogIn = () => {
                 })}
               />
 
-              <label class="label">
+              <label className="label">
                 {errors.password?.type === "required" && (
-                  <span class="label-text-alt text-red-500">
+                  <span className="label-text-alt text-red-500">
                     {errors.password?.message}
                   </span>
                 )}
                 {errors.password?.type === "pattern" && (
-                  <span class="label-text-alt text-red-500">
+                  <span className="label-text-alt text-red-500">
                     {errors.password?.message}
                   </span>
                 )}
               </label>
             </div>
 
-            <label class="label">
-              <a href="#" class="label-text-alt link link-hover">
+            <label className="label">
+              <a href="#" className="label-text-alt link link-hover">
                 Forgot password?
               </a>
             </label>
             {logInError}
-            <div class="form-control mt-6">
-              <button class="btn btn-accent">Login</button>
+            <div className="form-control mt-6">
+              <button className="btn btn-accent">Login</button>
             </div>
             <div className="flex justify-center mt-3">
               <small className="text-accent mr-1">New to Doctors Portal?</small>
@@ -127,7 +129,7 @@ const LogIn = () => {
             </div>
           </form>
 
-          <div class="divider">OR</div>
+          <div className="divider">OR</div>
 
           <SocialLogin />
         </div>

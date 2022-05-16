@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import SocialLogin from "../Hooks/SocialLogin";
+import SocialLogin from "../../Hooks/SocialLogin";
 import { useForm } from "react-hook-form";
 import {
   useCreateUserWithEmailAndPassword,
   useUpdateProfile,
 } from "react-firebase-hooks/auth";
-import auth from "../firebase.init";
-import Loading from "../Hooks/Loading";
+import auth from "../../firebase.init";
+import Loading from "../../Hooks/Loading";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -17,6 +17,12 @@ const SignUp = () => {
 
   const [updateProfile, updating, updateError] = useUpdateProfile(auth);
 
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
   const {
     register,
     formState: { errors },
@@ -25,7 +31,6 @@ const SignUp = () => {
   const onSubmit = async (data) => {
     await createUserWithEmailAndPassword(data.email, data.password);
     await updateProfile({ displayName: data.name });
-    console.log(data);
   };
 
   let signInError;
@@ -36,22 +41,19 @@ const SignUp = () => {
   if (error || updateError) {
     signInError = <p className="text-red-500">{error?.message}</p>;
   }
-  if (user) {
-    navigate("/");
-  }
 
   return (
-    <div class="hero min-h-screen">
-      <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+    <div className="hero min-h-screen">
+      <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
         <h2 className="text-center text-2xl">Sign Up</h2>
-        <div class="card-body">
+        <div className="card-body">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div class="form-control  w-full max-w-xs">
-              <label class="label">
-                <span class="label-text">Name</span>
+            <div className="form-control  w-full max-w-xs">
+              <label className="label">
+                <span className="label-text">Name</span>
               </label>
               <input
-                class="input input-bordered w-full max-w-xs"
+                className="input input-bordered w-full max-w-xs"
                 {...register("name", {
                   required: {
                     value: true,
@@ -59,20 +61,20 @@ const SignUp = () => {
                   },
                 })}
               />
-              <label class="label">
+              <label className="label">
                 {errors.name?.type === "required" && (
-                  <span class="label-text-alt text-red-500">
+                  <span className="label-text-alt text-red-500">
                     {errors.name?.message}
                   </span>
                 )}
               </label>
             </div>
-            <div class="form-control w-full max-w-xs">
-              <label class="label">
-                <span class="label-text">Email</span>
+            <div className="form-control w-full max-w-xs">
+              <label className="label">
+                <span className="label-text">Email</span>
               </label>
               <input
-                class="input input-bordered w-full max-w-xs"
+                className="input input-bordered w-full max-w-xs"
                 {...register("email", {
                   required: {
                     value: true,
@@ -85,26 +87,26 @@ const SignUp = () => {
                 })}
               />
 
-              <label class="label">
+              <label className="label">
                 {errors.email?.type === "required" && (
-                  <span class="label-text-alt text-red-500">
+                  <span className="label-text-alt text-red-500">
                     {errors.email?.message}
                   </span>
                 )}
                 {errors.email?.type === "pattern" && (
-                  <span class="label-text-alt text-red-500">
+                  <span className="label-text-alt text-red-500">
                     {errors.email?.message}
                   </span>
                 )}
               </label>
             </div>
 
-            <div class="form-control w-full max-w-xs">
-              <label class="label">
-                <span class="label-text">Password</span>
+            <div className="form-control w-full max-w-xs">
+              <label className="label">
+                <span className="label-text">Password</span>
               </label>
               <input
-                class="input input-bordered w-full max-w-xs"
+                className="input input-bordered w-full max-w-xs"
                 {...register("password", {
                   required: {
                     value: true,
@@ -118,22 +120,22 @@ const SignUp = () => {
                 })}
               />
 
-              <label class="label">
+              <label className="label">
                 {errors.password?.type === "required" && (
-                  <span class="label-text-alt text-red-500">
+                  <span className="label-text-alt text-red-500">
                     {errors.password?.message}
                   </span>
                 )}
                 {errors.password?.type === "pattern" && (
-                  <span class="label-text-alt text-red-500">
+                  <span className="label-text-alt text-red-500">
                     {errors.password?.message}
                   </span>
                 )}
               </label>
             </div>
             {signInError}
-            <div class="form-control mt-6">
-              <button class="btn btn-accent">Sign Up</button>
+            <div className="form-control mt-6">
+              <button className="btn btn-accent">Sign Up</button>
             </div>
             <div className="flex flex-col sm:flex-row justify-center mt-3">
               <small className="text-accent mr-1">New to Doctors Portal?</small>
@@ -146,7 +148,7 @@ const SignUp = () => {
             </div>
           </form>
 
-          <div class="divider">OR</div>
+          <div className="divider">OR</div>
 
           <SocialLogin />
         </div>
