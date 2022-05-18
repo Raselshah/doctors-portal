@@ -13,6 +13,10 @@ import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import MyDashboard from "./Pages/Dashboard/MyDashboard";
 import ReviewDashboard from "./Pages/Dashboard/ReviewDashboard";
+import AllUsers from "./Pages/Dashboard/AllUsers";
+import RequireAdmin from "./Pages/RequireAuth/RequireAdmin/RequireAdmin";
+import AddDoctor from "./Pages/Dashboard/AddDoctor";
+import ManageDoctors from "./Pages/Dashboard/ManageDoctors";
 
 function App() {
   return (
@@ -39,6 +43,30 @@ function App() {
         >
           <Route index element={<MyDashboard />} />
           <Route path="review" element={<ReviewDashboard />} />
+          <Route
+            path="users"
+            element={
+              <RequireAdmin>
+                <AllUsers />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="addDoctor"
+            element={
+              <RequireAdmin>
+                <AddDoctor />
+              </RequireAdmin>
+            }
+          />
+          <Route
+            path="manageDoctor"
+            element={
+              <RequireAdmin>
+                <ManageDoctors />
+              </RequireAdmin>
+            }
+          />
         </Route>
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/contact" element={<Contact />} />

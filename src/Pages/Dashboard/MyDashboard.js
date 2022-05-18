@@ -1,8 +1,10 @@
+import { format } from "date-fns";
 import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
+import TimeButton from "./TimeButton";
 
 const MyDashboard = () => {
   const [appointments, setAppointment] = useState([]);
@@ -29,14 +31,44 @@ const MyDashboard = () => {
         });
     }
   }, [user]);
-  const time = appointments[0]?.date;
+  // const time = appointments[0]?.date;
+  const toDay = format(new Date(), "PP");
 
+  const [time, setTime] = useState(toDay);
+
+  const handleTime = (time) => {
+    setTime(time);
+  };
   return (
     <div>
       <div className="flex justify-between mt-6 mb-6 px-12">
         <h2 className="text-2xl">My Appointment: {appointments.length}</h2>
         <div>
-          <p className="btn btn-outline">{time}</p>
+          {/* {appointments.map((a) => (
+            <p onClick={() => handleTime(a.date)} className="btn btn-outline">
+              {a.date}
+            </p>
+
+            
+          ))} */}
+
+          <div class="dropdown dropdown-hover">
+            <label
+              onClick={() => handleTime(toDay)}
+              tabindex="0"
+              class="btn m-1"
+            >
+              {toDay}
+            </label>
+            <ul
+              tabindex="0"
+              class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              {appointments.map((a) => (
+                <TimeButton date={a} handleTime={handleTime} />
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
       <div className="overflow-x-auto rounded-lg px-12">
@@ -50,14 +82,32 @@ const MyDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {appointments.map((a, index) => (
+            {/* {appointments.map((a, index) => (
               <tr className="hover">
                 <th>{index + 1}</th>
                 <th>{a.patientName}</th>
                 <td>{a.treatmentName}</td>
                 <td>{a.slot}</td>
               </tr>
-            ))}
+            ))} */}
+
+            {/* <tr className="hover">
+              <th>{0 + 1}</th>
+              <th>{appointments[0]?.patientName}</th>
+              <td>{appointments[0]?.treatmentName}</td>
+              <td>{appointments[0]?.slot}</td>
+            </tr> */}
+
+            {appointments
+              .filter((appointment) => appointment.date === time)
+              .map((a, index) => (
+                <tr className="hover">
+                  <th>{index + 1}</th>
+                  <th>{a.patientName}</th>
+                  <td>{a.treatmentName}</td>
+                  <td>{a.slot}</td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
