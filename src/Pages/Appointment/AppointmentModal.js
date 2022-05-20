@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 const AppointmentModal = ({ treatment, date, setTreatment, refetch }) => {
   const [user, loading, error] = useAuthState(auth);
-  const { _id, name, slots } = treatment;
+  const { _id, name, slots, price } = treatment;
   const formattedDate = format(date, "PP");
   const handleBookingInfo = (event) => {
     event.preventDefault();
@@ -15,13 +15,14 @@ const AppointmentModal = ({ treatment, date, setTreatment, refetch }) => {
       treatmentId: _id,
       treatmentName: name,
       date: formattedDate,
+      price,
       slot,
       patient: user?.email,
       patientName: user?.displayName,
       phone: event.target.phone.value,
     };
 
-    fetch("http://localhost:5000/booking", {
+    fetch("https://damp-garden-09664.herokuapp.com/booking", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -111,6 +112,14 @@ const AppointmentModal = ({ treatment, date, setTreatment, refetch }) => {
               readOnly
               disabled
               value={user?.email || ""}
+              name="email"
+              type="text"
+              className="input input-bordered w-full max-w-xs"
+            />
+            <input
+              readOnly
+              disabled
+              value={price}
               name="email"
               type="text"
               className="input input-bordered w-full max-w-xs"

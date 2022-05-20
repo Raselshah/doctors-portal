@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 const UserRow = ({ d, index, refetch }) => {
   const makeAdminButton = () => {
-    fetch(`http://localhost:5000/user/admin/${d?.email}`, {
+    fetch(`https://damp-garden-09664.herokuapp.com/user/admin/${d?.email}`, {
       method: "PUT",
       headers: {
         authorization: `Bearer ${localStorage.getItem("accessToken")}`,

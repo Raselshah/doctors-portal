@@ -15,7 +15,9 @@ const AddDoctor = () => {
   const imageStorageKey = "55d97a6b011b67c561e8c1314e9effca";
 
   const { data: services, isLoading } = useQuery("service", () =>
-    fetch("http://localhost:5000/service").then((res) => res.json())
+    fetch("https://damp-garden-09664.herokuapp.com/service").then((res) =>
+      res.json()
+    )
   );
 
   if (isLoading) {
@@ -41,7 +43,7 @@ const AddDoctor = () => {
             img: img,
           };
 
-          fetch("http://localhost:5000/doctors", {
+          fetch("https://damp-garden-09664.herokuapp.com/doctors", {
             method: "POST",
             headers: {
               "content-type": "application/json",
@@ -67,7 +69,7 @@ const AddDoctor = () => {
   return (
     <div className="hero min-h-screen">
       <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-        <h2 className="text-2xl px-6 text-secondary">Add Doctor</h2>
+        <h2 className="text-2xl text-secondary text-center">Add Doctor</h2>
         <div className="card-body">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-control  w-full max-w-xs">
@@ -156,9 +158,9 @@ const AddDoctor = () => {
               />
 
               <label className="label">
-                {errors.email?.type === "required" && (
+                {errors.image?.type === "required" && (
                   <span className="label-text-alt text-red-500">
-                    {errors.email?.message}
+                    {errors.image?.message}
                   </span>
                 )}
               </label>

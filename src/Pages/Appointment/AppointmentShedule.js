@@ -17,9 +17,9 @@ const AppointmentShedule = ({ date }) => {
     data: services,
     refetch,
   } = useQuery(["available", formattedDate], () =>
-    fetch(`http://localhost:5000/available?date=${formattedDate}`).then((res) =>
-      res.json()
-    )
+    fetch(
+      `https://damp-garden-09664.herokuapp.com/available?date=${formattedDate}`
+    ).then((res) => res.json())
   );
 
   if (isLoading) {
@@ -27,7 +27,7 @@ const AppointmentShedule = ({ date }) => {
   }
 
   // useEffect(() => {
-  //   const url = `http://localhost:5000/available?date=${formattedDate}`;
+  //   const url = `https://damp-garden-09664.herokuapp.com/available?date=${formattedDate}`;
   //   fetch(url)
   //     .then((res) => res.json())
   //     .then((data) => {

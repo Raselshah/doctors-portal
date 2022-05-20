@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
 import TimeButton from "./TimeButton";
 
@@ -12,12 +12,15 @@ const MyDashboard = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:5000/booking?patient=${user.email}`, {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
+      fetch(
+        `https://damp-garden-09664.herokuapp.com/booking?patient=${user.email}`,
+        {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
         .then((res) => {
           if (res.status === 401 || res.status === 403) {
             signOut(auth);
@@ -79,6 +82,7 @@ const MyDashboard = () => {
               <th>NAME</th>
               <th>SERVICE</th>
               <th>TIME</th>
+              <th>PAYMENT</th>
             </tr>
           </thead>
           <tbody>
@@ -90,7 +94,6 @@ const MyDashboard = () => {
                 <td>{a.slot}</td>
               </tr>
             ))} */}
-
             {/* <tr className="hover">
               <th>{0 + 1}</th>
               <th>{appointments[0]?.patientName}</th>
@@ -106,6 +109,25 @@ const MyDashboard = () => {
                   <th>{a.patientName}</th>
                   <td>{a.treatmentName}</td>
                   <td>{a.slot}</td>
+
+                  <td>
+                    {a.price && !a.paid && (
+                      <Link
+                        className="btn btn-xs btn-secondary hover:text-white"
+                        to={`/dashboard/payment/${a._id}`}
+                      >
+                        Pay
+                      </Link>
+                    )}
+                    {a.price && a.paid && (
+                      <div>
+                        <p className="text-success">Paid</p>
+                        <p className="text-success">
+                          TraxId : {a.transactionId}
+                        </p>
+                      </div>
+                    )}
+                  </td>
                 </tr>
               ))}
           </tbody>
